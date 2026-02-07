@@ -1,36 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMG Project Kanban Board</title>
+    <title>OMG 專案看板</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>OMG 專案看板</h1>
+        <header>
+            <h1>🎯 OMG 專案看板</h1>
+            <p class="subtitle">訂單管理系統重新建置規劃</p>
+            <p id="last-updated" class="last-updated"></p>
+        </header>
         <div class="kanban-board">
             <div class="column" id="todo" ondragover="allowDrop(event)" ondrop="drop(event)">
-                <h2>待辦</h2>
+                <h2>📋 待辦</h2>
                 <div class="cards"></div>
-                <button class="add-card" onclick="addCard('todo')">+ 新增卡片</button>
             </div>
             <div class="column" id="inprogress" ondragover="allowDrop(event)" ondrop="drop(event)">
-                <h2>進行中</h2>
+                <h2>🔄 進行中</h2>
                 <div class="cards"></div>
-                <button class="add-card" onclick="addCard('inprogress')">+ 新增卡片</button>
             </div>
             <div class="column" id="done" ondragover="allowDrop(event)" ondrop="drop(event)">
-                <h2>已完成</h2>
+                <h2>✅ 已完成</h2>
                 <div class="cards"></div>
-                <button class="add-card" onclick="addCard('done')">+ 新增卡片</button>
             </div>
             <div class="column" id="ideas" ondragover="allowDrop(event)" ondrop="drop(event)">
-                <h2>發想區</h2>
+                <h2>💡 發想區</h2>
                 <div class="cards"></div>
-                <button class="add-card" onclick="addCard('ideas')">+ 新增卡片</button>
             </div>
         </div>
+        <footer>
+            <p>💬 透過 Telegram 告訴小蝦來更新看板內容</p>
+        </footer>
     </div>
     <script src="script.js"></script>
 </body>

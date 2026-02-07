@@ -1,3 +1,5 @@
+const DATA_URL = 'https://raw.githubusercontent.com/aetherodie-cmyk/omg-kanban/main/data.json';
+
 let data = {
     todo: [],
     inprogress: [],
@@ -24,32 +26,12 @@ function drop(ev) {
     let cardsContainer = ev.currentTarget.querySelector('.cards');
     cardsContainer.appendChild(cardElement);
 
-    // Update data
+    // Update local data (won't persist without backend)
     let cardData = data[fromColumnId].find(card => "card-" + card.id === cardId);
     if (cardData) {
         data[fromColumnId] = data[fromColumnId].filter(card => "card-" + card.id !== cardId);
         data[toColumnId].push(cardData);
-        saveData();
     }
-}
-
-function addCard(columnId) {
-    const title = prompt("請輸入卡片標題：");
-    if (!title) return;
-
-    const description = prompt("請輸入卡片描述：");
-    const tags = prompt("請輸入標籤（用逗號分隔）：");
-
-    const newCard = {
-        id: Date.now(),
-        title,
-        description,
-        tags: tags ? tags.split(',').map(tag => tag.trim()) : []
-    };
-
-    data[columnId].push(newCard);
-    saveData();
-    renderBoard();
 }
 
 function renderCard(card) {
@@ -86,7 +68,9 @@ function renderCard(card) {
 
 function renderBoard() {
     for (const columnId in data) {
+        if (columnId === 'lastUpdated') continue;
         const column = document.getElementById(columnId);
+        if (!column) continue;
         const cardsContainer = column.querySelector('.cards');
         cardsContainer.innerHTML = '';
         data[columnId].forEach(card => {
@@ -94,35 +78,38 @@ function renderBoard() {
             cardsContainer.appendChild(cardElement);
         });
     }
-}
-
-function saveData() {
-    localStorage.setItem('kanbanData', JSON.stringify(data));
-}
-
-function loadData() {
-    const savedData = localStorage.getItem('kanbanData');
-    if (savedData) {
-        data = JSON.parse(savedData);
-    } else {
-        // Sample data for first-time users
-        data = {
-            todo: [
-                { id: 1, title: '設定專案 repository', description: '在 GitHub 上建立新的 repo', tags: ['開發'] },
-                { id: 2, title: '設計資料庫 schema', description: '規劃訂單和使用者資料表', tags: ['設計'] }
-            ],
-            inprogress: [
-                { id: 3, title: '開發使用者認證功能', description: '實作登入和註冊頁面', tags: ['開發'] }
-            ],
-            done: [
-                { id: 4, title: '完成專案提案', description: '與 stakeholders 確認需求', tags: ['討論'] }
-            ],
-            ideas: [
-                { id: 5, title: '整合第三方支付', description: '研究 Stripe 或 Braintree', tags: ['研究'] }
-            ]
-        };
+    
+    // Show last updated time
+    if (data.lastUpdated) {
+        const footer = document.getElementById('last-updated');
+        if (footer) {
+            const date = new Date(data.lastUpdated);
+            footer.textContent = '最後更新: ' + date.toLocaleString('zh-TW');
+        }
     }
-    renderBoard();
 }
 
+async function loadData() {
+    try {
+        // Add cache buster to get fresh data
+        const response = await fetch(DATA_URL + '?t=' + Date.now());
+        if (response.ok) {
+            data = await response.json();
+            renderBoard();
+            console.log('Data loaded from GitHub');
+        } else {
+            console.error('Failed to load data, using defaults');
+            renderBoard();
+        }
+    } catch (error) {
+        console.error('Error loading data:', error);
+        // Use empty defaults on error
+        renderBoard();
+    }
+}
+
+// Load data on page load
 loadData();
+
+// Auto-refresh every 30 seconds
+setInterval(loadData, 30000);

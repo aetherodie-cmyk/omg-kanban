@@ -1,0 +1,47 @@
+{
+  "todo": [
+    {
+      "id": 1,
+      "title": "設定專案 repository",
+      "description": "在 GitHub 上建立新的 repo",
+      "tags": ["開發"]
+    },
+    {
+      "id": 2,
+      "title": "設計資料庫 schema",
+      "description": "規劃訂單和使用者資料表",
+      "tags": ["設計"]
+    }
+  ],
+  "inprogress": [
+    {
+      "id": 3,
+      "title": "開發使用者認證功能",
+      "description": "實作登入和註冊頁面",
+      "tags": ["開發"]
+    }
+  ],
+  "done": [
+    {
+      "id": 4,
+      "title": "完成專案提案",
+      "description": "與 stakeholders 確認需求",
+      "tags": ["討論"]
+    }
+  ],
+  "ideas": [
+    {
+      "id": 5,
+      "title": "整合第三方支付",
+      "description": "研究 Stripe 或 Braintree",
+      "tags": ["研究"]
+    },
+    {
+      "id": 6,
+      "title": "Wireframe 放 GitHub",
+      "description": "版本控制 + 團隊協作",
+      "tags": ["決策"]
+    }
+  ],
+  "lastUpdated": "2026-02-07T16:20:00+08:00"
+}
